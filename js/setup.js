@@ -32,7 +32,7 @@ var renderArrayWizards = function () {
   return wizardsArray;
 };
 
-var renderWizard = function (wizard) {
+var renderOneWizard = function (wizard) {
   var wizardElement = similarWizardTemplate.cloneNode(true);
 
   wizardElement.querySelector('.setup-similar-label').textContent = wizard.name;
@@ -45,8 +45,8 @@ var renderWizard = function (wizard) {
 var renderWizards = function () {
   var fragment = document.createDocumentFragment();
   var wizards = renderArrayWizards();
-  for (var i = 0; i < WIZARD_NUMBERS; i++) {
-    fragment.appendChild(renderWizard(wizards[i]));
+  for (var i = 0; i < wizards.length; i++) {
+    fragment.appendChild(renderOneWizard(wizards[i]));
   }
 
   similarListElement.appendChild(fragment);
