@@ -26,6 +26,5 @@
   };
 
   renderWizards();
-  userDialog.classList.remove('hidden');
   userDialog.querySelector('.setup-similar').classList.remove('hidden');
 })();
