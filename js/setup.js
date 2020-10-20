@@ -2,7 +2,6 @@
 
 (function () {
   var userDialog = document.querySelector('.setup');
-  var userNameInput = userDialog.querySelector('.setup-user-name');
   var similarListElement = userDialog.querySelector('.setup-similar-list');
   var similarWizardTemplate = document.querySelector('#similar-wizard-template').content.querySelector('.setup-similar-item');
 
@@ -29,9 +28,4 @@
   renderWizards();
   userDialog.classList.remove('hidden');
   userDialog.querySelector('.setup-similar').classList.remove('hidden');
-
-  window.setup = {
-    userDialog,
-    userNameInput
-  };
 })();

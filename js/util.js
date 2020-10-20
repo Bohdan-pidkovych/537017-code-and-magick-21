@@ -1,7 +1,16 @@
 'use strict';
 (function () {
+  var userDialog = document.querySelector('.setup');
+  var userNameInput = userDialog.querySelector('.setup-user-name');
+
+  var getRandomInt = function (min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min)) + min;
+  };
+
   var isEscEvent = function (evt, action) {
-    if (evt.key === 'Escape' && evt.target !== window.setup.userNameInput) {
+    if (evt.key === 'Escape' && evt.target !== userNameInput) {
       evt.preventDefault();
       action();
     }
@@ -13,27 +22,9 @@
     }
   };
 
-  var defaultCoords = {
-    x: '',
-    y: ''
-  };
-
-  var calculateDefaultCoords = function () {
-    defaultCoords = {
-      x: window.setup.userDialog.offsetLeft,
-      y: window.setup.userDialog.offsetTop
-    };
-  };
-
-  var returnDefaultCoords = function () {
-    window.setup.userDialog.style.left = defaultCoords.x + 'px';
-    window.setup.userDialog.style.top = defaultCoords.y + 'px';
-  };
-
   window.util = {
+    getRandomInt,
     isEscEvent,
-    isEnterEvent,
-    calculateDefaultCoords,
-    returnDefaultCoords
+    isEnterEvent
   };
 })();

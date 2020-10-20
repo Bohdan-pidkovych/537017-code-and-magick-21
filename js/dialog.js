@@ -1,23 +1,41 @@
 'use strict';
 
 (function () {
+  var userDialog = document.querySelector('.setup');
   var setupOpen = document.querySelector('.setup-open');
-  var setupClose = window.setup.userDialog.querySelector('.setup-close');
+  var setupClose = userDialog.querySelector('.setup-close');
 
   var onPopupEscPress = function (evt) {
     window.util.isEscEvent(evt, closePopup);
   };
 
+  var defaultCoords = {
+    x: '',
+    y: ''
+  };
+
+  var calculateDefaultCoords = function () {
+    defaultCoords = {
+      x: userDialog.offsetLeft,
+      y: userDialog.offsetTop
+    };
+  };
+
+  var returnDefaultCoords = function () {
+    userDialog.style.left = defaultCoords.x + 'px';
+    userDialog.style.top = defaultCoords.y + 'px';
+  };
+
   var openPopup = function () {
-    window.setup.userDialog.classList.remove('hidden');
-    window.util.calculateDefaultCoords();
+    userDialog.classList.remove('hidden');
+    calculateDefaultCoords();
 
     document.addEventListener('keydown', onPopupEscPress);
   };
 
   var closePopup = function () {
-    window.setup.userDialog.classList.add('hidden');
-    window.util.returnDefaultCoords();
+    userDialog.classList.add('hidden');
+    returnDefaultCoords();
 
     document.removeEventListener('keydown', onPopupEscPress);
   };
@@ -38,7 +56,7 @@
     window.util.isEnterEvent(evt, closePopup);
   });
 
-  var dialogHandle = window.setup.userDialog.querySelector('.upload');
+  var dialogHandle = userDialog.querySelector('.upload');
 
   dialogHandle.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
@@ -65,8 +83,8 @@
         y: moveEvt.clientY
       };
 
-      window.setup.userDialog.style.top = (window.setup.userDialog.offsetTop - shift.y) + 'px';
-      window.setup.userDialog.style.left = (window.setup.userDialog.offsetLeft - shift.x) + 'px';
+      userDialog.style.top = (userDialog.offsetTop - shift.y) + 'px';
+      userDialog.style.left = (userDialog.offsetLeft - shift.x) + 'px';
     };
 
     var onMouseUp = function (upEvt) {
@@ -88,30 +106,30 @@
     document.addEventListener('mouseup', onMouseUp);
   });
 
-  var setupWizard = window.setup.userDialog.querySelector('.setup-wizard');
+  var setupWizard = userDialog.querySelector('.setup-wizard');
   var wizardCoat = setupWizard.querySelector('.wizard-coat');
   var wizardEyes = setupWizard.querySelector('.wizard-eyes');
-  var wizardFireball = window.setup.userDialog.querySelector('.setup-fireball-wrap');
-  var coatInput = window.setup.userDialog.querySelector('input[name="coat-color"]');
-  var eyesInput = window.setup.userDialog.querySelector('input[name="eyes-color"]');
+  var wizardFireball = userDialog.querySelector('.setup-fireball-wrap');
+  var coatInput = userDialog.querySelector('input[name="coat-color"]');
+  var eyesInput = userDialog.querySelector('input[name="eyes-color"]');
   var fireballInput = wizardFireball.querySelector('input');
 
   wizardCoat.addEventListener('click', function () {
-    var colorIndex = window.data.getRandomInt(0, window.data.COAT_COLORS.length);
+    var colorIndex = window.util.getRandomInt(0, window.data.COAT_COLORS.length);
     var color = window.data.COAT_COLORS[colorIndex];
     wizardCoat.style.fill = color;
     coatInput.value = color;
   });
 
   wizardEyes.addEventListener('click', function () {
-    var colorIndex = window.data.getRandomInt(0, window.data.EYES_COLORS.length);
+    var colorIndex = window.util.getRandomInt(0, window.data.EYES_COLORS.length);
     var color = window.data.EYES_COLORS[colorIndex];
     wizardEyes.style.fill = color;
     eyesInput.value = color;
   });
 
   wizardFireball.addEventListener('click', function () {
-    var colorIndex = window.data.getRandomInt(0, window.data.FIREBALL_COLORS.length);
+    var colorIndex = window.util.getRandomInt(0, window.data.FIREBALL_COLORS.length);
     var color = window.data.FIREBALL_COLORS[colorIndex];
     wizardFireball.style.background = color;
     fireballInput.value = color;

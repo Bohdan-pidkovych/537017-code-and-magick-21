@@ -8,19 +8,13 @@
   var FIREBALL_COLORS = ['#ee4830', '#30a8ee', '#5ce6c0', '#e848d5', '#e6e848'];
   var WIZARD_NUMBERS = 4;
 
-  var getRandomInt = function (min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min)) + min;
-  };
-
   var renderArrayWizards = function () {
     var wizardsArray = [];
     for (var i = 0; i < WIZARD_NUMBERS; i++) {
-      var nameIndex = getRandomInt(0, WIZARD_NAMES.length);
-      var surnameIndex = getRandomInt(0, WIZARD_SURNAMES.length);
-      var coatColorIndex = getRandomInt(0, COAT_COLORS.length);
-      var eyesColorIndex = getRandomInt(0, EYES_COLORS.length);
+      var nameIndex = window.util.getRandomInt(0, WIZARD_NAMES.length);
+      var surnameIndex = window.util.getRandomInt(0, WIZARD_SURNAMES.length);
+      var coatColorIndex = window.util.getRandomInt(0, COAT_COLORS.length);
+      var eyesColorIndex = window.util.getRandomInt(0, EYES_COLORS.length);
       wizardsArray[i] = {
         name: `${WIZARD_NAMES[nameIndex]} ${WIZARD_SURNAMES[surnameIndex]}`,
         coatColor: COAT_COLORS[coatColorIndex],
@@ -31,13 +25,9 @@
   };
 
   window.data = {
-    WIZARD_NAMES,
-    WIZARD_SURNAMES,
     COAT_COLORS,
     EYES_COLORS,
     FIREBALL_COLORS,
-    WIZARD_NUMBERS,
-    getRandomInt,
     renderArrayWizards
   };
 })();
