@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  var MAX_SIMILAR_WIZARD_COUNT = 4;
   var userDialog = document.querySelector('.setup');
   var similarListElement = userDialog.querySelector('.setup-similar-list');
   var similarWizardTemplate = document.querySelector('#similar-wizard-template').content.querySelector('.setup-similar-item');
@@ -17,7 +18,7 @@
 
   var successHandler = function (wizards) {
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < window.data.MAX_SIMILAR_WIZARD_COUNT; i++) {
+    for (var i = 0; i < MAX_SIMILAR_WIZARD_COUNT; i++) {
       fragment.appendChild(renderOneWizard(wizards[i]));
     }
     similarListElement.appendChild(fragment);
@@ -42,7 +43,7 @@
   form.addEventListener('submit', function (evt) {
     window.backend.save(new FormData(form), function () {
       userDialog.classList.add('hidden');
-    });
+    }, errorHandler);
     evt.preventDefault();
   });
 })();
