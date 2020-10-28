@@ -2,27 +2,111 @@
 
 (function () {
   var userDialog = document.querySelector('.setup');
-  var similarListElement = userDialog.querySelector('.setup-similar-list');
-  var similarWizardTemplate = document.querySelector('#similar-wizard-template').content.querySelector('.setup-similar-item');
+  var setupOpen = document.querySelector('.setup-open');
+  var setupClose = userDialog.querySelector('.setup-close');
 
-  var renderOneWizard = function (wizard) {
-    var wizardElement = similarWizardTemplate.cloneNode(true);
+  var wizards = [];
 
-    wizardElement.querySelector('.setup-similar-label').textContent = wizard.name;
-    wizardElement.querySelector('.wizard-coat').style.fill = wizard.colorCoat;
-    wizardElement.querySelector('.wizard-eyes').style.fill = wizard.colorEyes;
-
-    return wizardElement;
+  var onPopupEscPress = function (evt) {
+    window.util.isEscEvent(evt, closePopup);
   };
 
-  var successHandler = function (wizards) {
-    var fragment = document.createDocumentFragment();
-    for (var i = 0; i < window.data.MAX_SIMILAR_WIZARD_COUNT; i++) {
-      fragment.appendChild(renderOneWizard(wizards[i]));
-    }
-    similarListElement.appendChild(fragment);
+  var defaultCoords = {
+    x: '',
+    y: ''
+  };
 
-    userDialog.querySelector('.setup-similar').classList.remove('hidden');
+  var calculateDefaultCoords = function () {
+    defaultCoords = {
+      x: userDialog.offsetLeft,
+      y: userDialog.offsetTop
+    };
+  };
+
+  var returnDefaultCoords = function () {
+    userDialog.style.left = defaultCoords.x + 'px';
+    userDialog.style.top = defaultCoords.y + 'px';
+  };
+
+  var openPopup = function () {
+    userDialog.classList.remove('hidden');
+    calculateDefaultCoords();
+
+    document.addEventListener('keydown', onPopupEscPress);
+  };
+
+  var closePopup = function () {
+    userDialog.classList.add('hidden');
+    returnDefaultCoords();
+
+    document.removeEventListener('keydown', onPopupEscPress);
+  };
+
+  setupOpen.addEventListener('click', function () {
+    openPopup();
+  });
+
+  setupOpen.addEventListener('keydown', function (evt) {
+    window.util.isEnterEvent(evt, openPopup);
+  });
+
+  setupClose.addEventListener('click', function () {
+    closePopup();
+  });
+
+  setupClose.addEventListener('keydown', function (evt) {
+    window.util.isEnterEvent(evt, closePopup);
+  });
+
+  var coatColor = 'rgb(101, 137, 164)';
+  var eyesColor = 'black';
+
+  var getRank = function (wizard) {
+    var rank = 0;
+
+    if (wizard.colorCoat === coatColor) {
+      rank += 2;
+    }
+    if (wizard.colorEyes === eyesColor) {
+      rank += 1;
+    }
+
+    return rank;
+  };
+
+  var namesComparator = function (left, right) {
+    if (left > right) {
+      return 1;
+    } else if (left < right) {
+      return -1;
+    } else {
+      return 0;
+    }
+  };
+
+  var updateWizards = function () {
+    window.render.renderWizards(wizards.sort(function (left, right) {
+      var rankDiff = getRank(right) - getRank(left);
+      if (rankDiff === 0) {
+        rankDiff = namesComparator(left.name, right.name);
+      }
+      return rankDiff;
+    }));
+  };
+
+  window.wizard.onCoatChange = window.debounce(function (color) {
+    coatColor = color;
+    updateWizards();
+  });
+
+  window.wizard.onEyesChange = window.debounce(function (color) {
+    eyesColor = color;
+    updateWizards();
+  });
+
+  var successHandler = function (data) {
+    wizards = data;
+    updateWizards();
   };
 
   var errorHandler = function (errorMessage) {
@@ -42,7 +126,7 @@
   form.addEventListener('submit', function (evt) {
     window.backend.save(new FormData(form), function () {
       userDialog.classList.add('hidden');
-    });
+    }, errorHandler);
     evt.preventDefault();
   });
 })();
