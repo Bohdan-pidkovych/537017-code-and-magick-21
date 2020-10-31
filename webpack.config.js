@@ -7,6 +7,7 @@ module.exports = {
     "./js/data.js",
     "./js/util.js",
     "./js/debounce.js",
+    "./js/avatar.js",
     "./js/render.js",
     "./js/wizard.js",
     "./js/setup.js",
